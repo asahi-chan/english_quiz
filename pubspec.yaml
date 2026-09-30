@@ -58,7 +58,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/data/english_words_10.json
+    - assets/data/english_words_60.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'end.dart';
+import 'setting.dart';
 import '../service/make_quiz.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -20,6 +21,37 @@ class _QuizScreenState extends State<QuizScreen> {
   late final Future<void> _loadQuizFuture;
   int _currentIndex = 0;
   bool _showAnswer = false;
+
+  Future<void> _showBackToSettingsDialog() async {
+    final shouldGoBack = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('出題設定に戻りますか？'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('いいえ'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('はい'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldGoBack == true && mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const SettingScreen()),
+      );
+    }
+  }
 
   String get _buttonLabel {
     if (_showAnswer &&
@@ -92,10 +124,27 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: _showBackToSettingsDialog,
+                      icon: const Icon(Icons.home),
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(
+                      '問題番号：${word?.id ?? ''}',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
                     Text(
                       questionText,
                       style: Theme.of(context).textTheme.headlineMedium,

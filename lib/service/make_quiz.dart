@@ -58,7 +58,7 @@ void setQuiz(List<Word> words, String orderType) {
 // クイズリストを読み込む関数
 Future<void> loadQuiz(String orderType) async {
   final source = await rootBundle.loadString(
-    'assets/data/english_words_10.json',
+    'assets/data/english_words_60.json',
   );
   setQuiz(wordsFromJson(source), orderType);
 }
