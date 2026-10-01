@@ -4,10 +4,14 @@ import 'quiz.dart';
 import 'setting.dart';
 
 class EndScreen extends StatelessWidget {
-  const EndScreen({super.key, this.questionType, this.orderType});
+  const EndScreen({
+    super.key,
+    required this.questionType,
+    required this.orderType,
+  });
 
-  final dynamic questionType;
-  final dynamic orderType;
+  final String? questionType;
+  final String? orderType;
 
   @override
   Widget build(BuildContext context) {

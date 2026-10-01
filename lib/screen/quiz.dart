@@ -83,7 +83,12 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (_currentIndex == quizList.length - 1) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const EndScreen()),
+        MaterialPageRoute(
+          builder: (context) => EndScreen(
+            questionType: widget.questionType,
+            orderType: widget.orderType,
+          ),
+        ),
       );
       return;
     }
