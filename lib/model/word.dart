@@ -7,13 +7,27 @@ class Word {
     required this.isFavorite,
   });
 
-  factory Word.fromJson(Map<String, dynamic> json) {
+  factory Word.fromMap(Map<String, dynamic> map) {
     return Word(
-      id: json['id'] as int,
-      english: json['english'] as String,
-      japanese: json['japanese'] as String,
-      level: json['level'] as String,
-      isFavorite: json['is_favorite'] as bool,
+      id: map['id'] as int,
+      english: map['english'] as String,
+      japanese: map['japanese'] as String,
+      level: map['level'] as String,
+      isFavorite: _parseIsFavorite(map['is_favorite']),
+    );
+  }
+
+  static bool _parseIsFavorite(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+    if (value is int) {
+      return value != 0;
+    }
+    throw ArgumentError.value(
+      value,
+      'value',
+      'is_favorite must be bool or int',
     );
   }
 

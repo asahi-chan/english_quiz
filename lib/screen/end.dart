@@ -10,22 +10,13 @@ class EndScreen extends StatelessWidget {
     required this.orderType,
   });
 
-  final String? questionType;
-  final String? orderType;
+  final String questionType;
+  final String orderType;
 
   @override
   Widget build(BuildContext context) {
-    final routeArguments = ModalRoute.of(context)?.settings.arguments;
-    final resolvedQuestionType =
-        questionType ??
-        (routeArguments is Map<String, dynamic>
-            ? routeArguments['questionType']
-            : routeArguments);
-    final resolvedOrderType =
-        orderType ??
-        (routeArguments is Map<String, dynamic>
-            ? routeArguments['orderType']
-            : null);
+    final resolvedQuestionType = questionType;
+    final resolvedOrderType = orderType;
 
     return Scaffold(
       body: Center(

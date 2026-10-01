@@ -1,18 +1,9 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:english_quiz/model/word.dart';
-//import 'package:sqflite/sqflite.dart';
+import 'package:english_quiz/repository/word_repository.dart';
 
 final List<Word> quizList = [];
 
-// jsonから単語リストを作成する関数
-//今後はここでフィルターするべき？
-List<Word> wordsFromJson(String source) {
-  final decoded = jsonDecode(source) as List<dynamic>;
-  return decoded
-      .map((item) => Word.fromJson(item as Map<String, dynamic>))
-      .toList();
-}
+final WordRepository _wordRepository = WordRepository();
 
 // クイズリストを設定する関数
 void setQuiz(List<Word> words, String orderType) {
@@ -31,8 +22,6 @@ void setQuiz(List<Word> words, String orderType) {
 
 // クイズリストを読み込む関数
 Future<void> loadQuiz(String orderType) async {
-  final source = await rootBundle.loadString(
-    'assets/data/english_words_60.json',
-  );
-  setQuiz(wordsFromJson(source), orderType);
+  final words = await _wordRepository.fetchAllWords();
+  setQuiz(words, orderType);
 }

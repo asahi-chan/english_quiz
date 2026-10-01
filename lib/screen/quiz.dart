@@ -105,6 +105,19 @@ class _QuizScreenState extends State<QuizScreen> {
       body: FutureBuilder<void>(
         future: _loadQuizFuture,
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'クイズの読み込みに失敗しました。\n\nエラー内容: ${snapshot.error}',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
