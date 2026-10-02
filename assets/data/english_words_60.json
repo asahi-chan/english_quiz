@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1,
+    "english": "eat",
+    "japanese": "食べる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 2,
+    "english": "drink",
+    "japanese": "飲む",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 3,
+    "english": "run",
+    "japanese": "走る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 4,
+    "english": "sleep",
+    "japanese": "眠る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 5,
+    "english": "write",
+    "japanese": "書く",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 6,
+    "english": "read",
+    "japanese": "読む",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 7,
+    "english": "learn",
+    "japanese": "学ぶ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 8,
+    "english": "build",
+    "japanese": "作る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 9,
+    "english": "choose",
+    "japanese": "選ぶ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 10,
+    "english": "understand",
+    "japanese": "理解する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 11,
+    "english": "speak",
+    "japanese": "話す",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 12,
+    "english": "listen",
+    "japanese": "聞く",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 13,
+    "english": "walk",
+    "japanese": "歩く",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 14,
+    "english": "stand",
+    "japanese": "立つ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 15,
+    "english": "sit",
+    "japanese": "座る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 16,
+    "english": "open",
+    "japanese": "開ける",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 17,
+    "english": "close",
+    "japanese": "閉める",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 18,
+    "english": "buy",
+    "japanese": "買う",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 19,
+    "english": "sell",
+    "japanese": "売る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 20,
+    "english": "give",
+    "japanese": "与える",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 21,
+    "english": "take",
+    "japanese": "取る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 22,
+    "english": "make",
+    "japanese": "作る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 23,
+    "english": "use",
+    "japanese": "使う",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 24,
+    "english": "find",
+    "japanese": "見つける",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 25,
+    "english": "look",
+    "japanese": "見る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 26,
+    "english": "watch",
+    "japanese": "見る・観察する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 27,
+    "english": "help",
+    "japanese": "助ける",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 28,
+    "english": "work",
+    "japanese": "働く",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 29,
+    "english": "study",
+    "japanese": "勉強する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 30,
+    "english": "play",
+    "japanese": "遊ぶ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 31,
+    "english": "live",
+    "japanese": "住む・生きる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 32,
+    "english": "love",
+    "japanese": "愛する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 33,
+    "english": "like",
+    "japanese": "好む",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 34,
+    "english": "want",
+    "japanese": "欲しい・したい",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 35,
+    "english": "need",
+    "japanese": "必要とする",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 36,
+    "english": "know",
+    "japanese": "知っている",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 37,
+    "english": "think",
+    "japanese": "考える",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 38,
+    "english": "remember",
+    "japanese": "覚えている",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 39,
+    "english": "forget",
+    "japanese": "忘れる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 40,
+    "english": "start",
+    "japanese": "始める",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 41,
+    "english": "finish",
+    "japanese": "終える",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 42,
+    "english": "wait",
+    "japanese": "待つ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 43,
+    "english": "meet",
+    "japanese": "会う",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 44,
+    "english": "call",
+    "japanese": "呼ぶ・電話する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 45,
+    "english": "ask",
+    "japanese": "尋ねる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 46,
+    "english": "answer",
+    "japanese": "答える",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 47,
+    "english": "send",
+    "japanese": "送る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 48,
+    "english": "receive",
+    "japanese": "受け取る",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 49,
+    "english": "bring",
+    "japanese": "持ってくる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 50,
+    "english": "carry",
+    "japanese": "運ぶ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 51,
+    "english": "move",
+    "japanese": "動く・動かす",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 52,
+    "english": "stop",
+    "japanese": "止まる・止める",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 53,
+    "english": "turn",
+    "japanese": "曲がる・回す",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 54,
+    "english": "show",
+    "japanese": "見せる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 55,
+    "english": "change",
+    "japanese": "変える・変わる",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 56,
+    "english": "try",
+    "japanese": "試す",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 57,
+    "english": "keep",
+    "japanese": "保つ",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 58,
+    "english": "leave",
+    "japanese": "去る・残す",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 59,
+    "english": "arrive",
+    "japanese": "到着する",
+    "level": "A",
+    "is_favorite": false
+  },
+  {
+    "id": 60,
+    "english": "return",
+    "japanese": "戻る・返す",
+    "level": "A",
+    "is_favorite": false
+  }
+]
