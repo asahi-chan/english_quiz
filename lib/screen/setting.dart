@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'quiz.dart';
 
@@ -11,6 +12,12 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  static const _questionTypeKey = 'settings.questionType';
+  static const _orderTypeKey = 'settings.orderType';
+  static const _questionCountKey = 'settings.questionCount';
+  static const _selectedLevelsKey = 'settings.selectedLevels';
+  static const _startQuestionNumberKey = 'settings.startQuestionNumber';
+
   final _formKey = GlobalKey<FormState>();
   final _startQuestionNumberController = TextEditingController();
   String _questionType = 'englishToJapanese';
@@ -32,6 +39,65 @@ class _SettingScreenState extends State<SettingScreen> {
       .where((entry) => entry.value)
       .map((entry) => entry.key)
       .toList();
+
+  int? get _startQuestionNumber {
+    final text = _startQuestionNumberController.text;
+    if (text.isEmpty) {
+      return null;
+    }
+
+    return int.tryParse(text);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedSettings();
+  }
+
+  Future<void> _loadSavedSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedQuestionType = prefs.getString(_questionTypeKey);
+    final savedOrderType = prefs.getString(_orderTypeKey);
+    final savedQuestionCount = prefs.getString(_questionCountKey);
+    final savedSelectedLevels = prefs.getStringList(_selectedLevelsKey) ?? [];
+    final savedStartQuestionNumber =
+        prefs.getString(_startQuestionNumberKey) ?? '';
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (savedQuestionType != null) {
+        _questionType = savedQuestionType;
+      }
+      if (savedOrderType != null) {
+        _orderType = savedOrderType;
+      }
+      if (savedQuestionCount != null) {
+        _questionCount = savedQuestionCount;
+      }
+
+      for (final level in _levelSelections.keys) {
+        _levelSelections[level] = savedSelectedLevels.contains(level);
+      }
+
+      _startQuestionNumberController.text = savedStartQuestionNumber;
+    });
+  }
+
+  Future<void> _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_questionTypeKey, _questionType);
+    await prefs.setString(_orderTypeKey, _orderType);
+    await prefs.setString(_questionCountKey, _questionCount);
+    await prefs.setStringList(_selectedLevelsKey, _selectedLevels);
+    await prefs.setString(
+      _startQuestionNumberKey,
+      _startQuestionNumberController.text,
+    );
+  }
 
   @override
   void dispose() {
@@ -81,6 +147,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         _levelSelections[entry.key] =
                                             value ?? false;
                                       });
+                                      _saveSettings();
                                     },
                             );
                           }).toList(),
@@ -101,6 +168,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ],
                                 onChanged: (_) {
                                   setState(() {});
+                                  _saveSettings();
                                 },
                                 decoration: const InputDecoration(
                                   isDense: true,
@@ -162,6 +230,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 setState(() {
                                   _questionCount = value;
                                 });
+                                _saveSettings();
                               },
                             );
                           }).toList(),
@@ -195,6 +264,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   setState(() {
                                     _questionType = value;
                                   });
+                                  _saveSettings();
                                 },
                               ),
                             ),
@@ -212,6 +282,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   setState(() {
                                     _questionType = value;
                                   });
+                                  _saveSettings();
                                 },
                               ),
                             ),
@@ -246,6 +317,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   setState(() {
                                     _orderType = value;
                                   });
+                                  _saveSettings();
                                 },
                               ),
                             ),
@@ -262,6 +334,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   setState(() {
                                     _orderType = value;
                                   });
+                                  _saveSettings();
                                 },
                               ),
                             ),
@@ -295,6 +368,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     questionType: _questionType,
                     orderType: _orderType,
                     selectedLevels: _selectedLevels,
+                    questionCount: int.parse(_questionCount),
+                    startQuestionNumber: _startQuestionNumber,
                   ),
                 ),
               );

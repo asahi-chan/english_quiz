@@ -9,16 +9,29 @@ class WordRepository {
 
   final DatabaseHelper _databaseHelper;
 
-  Future<List<Word>> fetchAllWords({List<String> levels = const []}) async {
+  Future<List<Word>> fetchAllWords({
+    List<String> levels = const [],
+    required String orderType,
+    required int questionCount,
+    int? startQuestionNumber,
+  }) async {
     final db = await _databaseHelper.database;
+    final hasStartQuestionNumberFilter = startQuestionNumber != null;
     final hasLevelFilter = levels.isNotEmpty;
     final wordMaps = await db.query(
       'words',
-      where: hasLevelFilter
+      where: hasStartQuestionNumberFilter
+          ? 'id >= ?'
+          : hasLevelFilter
           ? 'level IN (${List.filled(levels.length, '?').join(', ')})'
           : null,
-      whereArgs: hasLevelFilter ? levels : null,
-      orderBy: 'id ASC',
+      whereArgs: hasStartQuestionNumberFilter
+          ? [startQuestionNumber]
+          : hasLevelFilter
+          ? levels
+          : null,
+      orderBy: orderType == 'numberOrder' ? 'id ASC' : 'RANDOM()',
+      limit: questionCount,
     );
 
     return wordMaps.map((wordMap) => Word.fromMap(wordMap)).toList();

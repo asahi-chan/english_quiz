@@ -10,11 +10,15 @@ class QuizScreen extends StatefulWidget {
     required this.questionType,
     required this.orderType,
     required this.selectedLevels,
+    required this.questionCount,
+    this.startQuestionNumber,
   });
 
   final String questionType;
   final String orderType;
   final List<String> selectedLevels;
+  final int questionCount;
+  final int? startQuestionNumber;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -70,7 +74,12 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    _loadQuizFuture = loadQuiz(widget.orderType, widget.selectedLevels);
+    _loadQuizFuture = loadQuiz(
+      widget.orderType,
+      widget.selectedLevels,
+      widget.questionCount,
+      widget.startQuestionNumber,
+    );
   }
 
   void _handleButtonPressed() {
@@ -91,6 +100,9 @@ class _QuizScreenState extends State<QuizScreen> {
           builder: (context) => EndScreen(
             questionType: widget.questionType,
             orderType: widget.orderType,
+            questionCount: widget.questionCount,
+            selectedLevels: widget.selectedLevels,
+            startQuestionNumber: widget.startQuestionNumber,
           ),
         ),
       );

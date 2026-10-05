@@ -8,12 +8,16 @@ class EndScreen extends StatelessWidget {
     super.key,
     required this.questionType,
     required this.orderType,
+    required this.questionCount,
     this.selectedLevels = const [],
+    this.startQuestionNumber,
   });
 
   final String questionType;
   final String orderType;
+  final int questionCount;
   final List<String> selectedLevels;
+  final int? startQuestionNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,9 @@ class EndScreen extends StatelessWidget {
                           builder: (context) => QuizScreen(
                             questionType: resolvedQuestionType,
                             orderType: resolvedOrderType,
+                            questionCount: questionCount,
                             selectedLevels: selectedLevels,
+                            startQuestionNumber: startQuestionNumber,
                           ),
                         ),
                       );
