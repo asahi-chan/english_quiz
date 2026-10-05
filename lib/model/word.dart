@@ -1,3 +1,5 @@
+// 単語データを表すモデルクラス
+
 class Word {
   const Word({
     required this.id,

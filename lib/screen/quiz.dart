@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../model/word.dart';
 import 'end.dart';
 import 'setting.dart';
 import '../service/make_quiz.dart';
@@ -8,17 +9,20 @@ class QuizScreen extends StatefulWidget {
     super.key,
     required this.questionType,
     required this.orderType,
+    required this.selectedLevels,
   });
 
   final String questionType;
   final String orderType;
+  final List<String> selectedLevels;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  late final Future<void> _loadQuizFuture;
+  late final Future<List<Word>> _loadQuizFuture;
+  List<Word> _quizList = [];
   int _currentIndex = 0;
   bool _showAnswer = false;
 
@@ -55,8 +59,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   String get _buttonLabel {
     if (_showAnswer &&
-        quizList.isNotEmpty &&
-        _currentIndex == quizList.length - 1) {
+        _quizList.isNotEmpty &&
+        _currentIndex == _quizList.length - 1) {
       return '終了';
     }
 
@@ -66,7 +70,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    _loadQuizFuture = loadQuiz(widget.orderType);
+    _loadQuizFuture = loadQuiz(widget.orderType, widget.selectedLevels);
   }
 
   void _handleButtonPressed() {
@@ -77,11 +81,11 @@ class _QuizScreenState extends State<QuizScreen> {
       return;
     }
 
-    if (quizList.isEmpty) {
+    if (_quizList.isEmpty) {
       return;
     }
 
-    if (_currentIndex == quizList.length - 1) {
+    if (_currentIndex == _quizList.length - 1) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => EndScreen(
@@ -102,7 +106,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<void>(
+      body: FutureBuilder<List<Word>>(
         future: _loadQuizFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -122,9 +126,11 @@ class _QuizScreenState extends State<QuizScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final word = quizList.isNotEmpty ? quizList[_currentIndex] : null;
+          _quizList = snapshot.data ?? [];
+
+          final word = _quizList.isNotEmpty ? _quizList[_currentIndex] : null;
           final progressText =
-              '${quizList.isNotEmpty ? _currentIndex + 1 : 0}/${quizList.length}';
+              '${_quizList.isNotEmpty ? _currentIndex + 1 : 0}/${_quizList.length}';
           final questionText = widget.questionType == 'japaneseToEnglish'
               ? word?.japanese ?? ''
               : word?.english ?? '';

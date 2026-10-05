@@ -1,3 +1,5 @@
+//データベースからデータを取得するためのヘルパークラス
+
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -14,7 +16,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('abc_60words.db');
+    _database = await _initDB('abc12_english_words_60.db');
     return _database!;
   }
 

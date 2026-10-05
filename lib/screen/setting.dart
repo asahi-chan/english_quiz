@@ -12,6 +12,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _startQuestionNumberController = TextEditingController();
   String _questionType = 'englishToJapanese';
   String _orderType = 'numberOrder';
   String _questionCount = '5';
@@ -23,6 +24,20 @@ class _SettingScreenState extends State<SettingScreen> {
     'C1': false,
     'C2': false,
   };
+
+  bool get _isQuestionNumberFilterEnabled =>
+      _startQuestionNumberController.text.isNotEmpty;
+
+  List<String> get _selectedLevels => _levelSelections.entries
+      .where((entry) => entry.value)
+      .map((entry) => entry.key)
+      .toList();
+
+  @override
+  void dispose() {
+    _startQuestionNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +74,14 @@ class _SettingScreenState extends State<SettingScreen> {
                               contentPadding: EdgeInsets.zero,
                               controlAffinity: ListTileControlAffinity.leading,
                               dense: true,
-                              onChanged: (value) {
-                                setState(() {
-                                  _levelSelections[entry.key] = value ?? false;
-                                });
-                              },
+                              onChanged: _isQuestionNumberFilterEnabled
+                                  ? null
+                                  : (value) {
+                                      setState(() {
+                                        _levelSelections[entry.key] =
+                                            value ?? false;
+                                      });
+                                    },
                             );
                           }).toList(),
                         ),
@@ -74,12 +92,16 @@ class _SettingScreenState extends State<SettingScreen> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: TextFormField(
+                                controller: _startQuestionNumberController,
                                 keyboardType: TextInputType.number,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
+                                onChanged: (_) {
+                                  setState(() {});
+                                },
                                 decoration: const InputDecoration(
                                   isDense: true,
                                   border: OutlineInputBorder(),
@@ -198,6 +220,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 16),
                   //順番
                   Container(
                     height: 72,
@@ -266,9 +289,12 @@ class _SettingScreenState extends State<SettingScreen> {
 
               Navigator.of(context).push(
                 MaterialPageRoute(
+                  //loadQuiz()を呼び出すのはQuizScreenであり、loadQuiz()はorderTypeやquestionTypeが必要だから
+                  //QuizScreenにこれらを渡している。
                   builder: (context) => QuizScreen(
                     questionType: _questionType,
                     orderType: _orderType,
+                    selectedLevels: _selectedLevels,
                   ),
                 ),
               );
