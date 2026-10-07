@@ -114,6 +114,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('出題設定'),
         backgroundColor: const Color.fromARGB(255, 142, 219, 255),
       ),
@@ -213,6 +214,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '※CEFRを参考に学習難易度の目安として単語のレベルを分類しています。公式な語彙リストを示すものではありません。',
+                    style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
                   //出題数
@@ -395,6 +401,15 @@ class _SettingScreenState extends State<SettingScreen> {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 0, 86, 156),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              textStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             onPressed: () {
               if (!(_formKey.currentState?.validate() ?? false)) {
                 return;
@@ -414,7 +429,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               );
             },
-            child: const Text('スタート💪'),
+            child: const Text('スタート💪', style: TextStyle(fontSize: 18)),
           ),
         ),
       ),

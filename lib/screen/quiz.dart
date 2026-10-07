@@ -71,6 +71,9 @@ class _QuizScreenState extends State<QuizScreen> {
     return _showAnswer ? '次へ' : '答えを見る';
   }
 
+  String get _progressText =>
+      '${_quizList.isNotEmpty ? _currentIndex + 1 : 0}/${_quizList.length}';
+
   @override
   void initState() {
     super.initState();
@@ -118,6 +121,17 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(_progressText),
+        backgroundColor: const Color.fromARGB(255, 142, 219, 255),
+        actions: [
+          IconButton(
+            onPressed: _showBackToSettingsDialog,
+            icon: const Icon(Icons.home),
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Word>>(
         future: _loadQuizFuture,
         builder: (context, snapshot) {
@@ -141,8 +155,6 @@ class _QuizScreenState extends State<QuizScreen> {
           _quizList = snapshot.data ?? [];
 
           final word = _quizList.isNotEmpty ? _quizList[_currentIndex] : null;
-          final progressText =
-              '${_quizList.isNotEmpty ? _currentIndex + 1 : 0}/${_quizList.length}';
           final questionText = widget.questionType == 'japaneseToEnglish'
               ? word?.japanese ?? ''
               : word?.english ?? '';
@@ -151,63 +163,70 @@ class _QuizScreenState extends State<QuizScreen> {
               : word?.japanese ?? '';
           return Stack(
             children: [
-              SafeArea(
+              Align(
+                alignment: const Alignment(0, -0.2),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(progressText),
-                  ),
-                ),
-              ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: _showBackToSettingsDialog,
-                      icon: const Icon(Icons.home),
-                    ),
-                  ),
-                ),
-              ),
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '問題番号：${word?.id ?? ''}',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      questionText,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    if (_showAnswer && word != null) ...[
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '問題番号：${word?.id ?? ''}',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(fontSize: 24),
+                      ),
                       const SizedBox(height: 12),
                       Text(
-                        answerText,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        questionText,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineMedium?.copyWith(fontSize: 48),
                       ),
+                      if (_showAnswer && word != null) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          answerText,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(fontSize: 36),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 144,
+                child: Center(
+                  child: SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 0, 86, 156),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: const CircleBorder(),
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: _handleButtonPressed,
+                      child: Text(_buttonLabel, textAlign: TextAlign.center),
+                    ),
+                  ),
                 ),
               ),
             ],
           );
         },
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.all(16),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: _handleButtonPressed,
-            child: Text(_buttonLabel),
-          ),
-        ),
       ),
     );
   }
