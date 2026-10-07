@@ -17,6 +17,11 @@ class _SettingScreenState extends State<SettingScreen> {
   static const _questionCountKey = 'settings.questionCount';
   static const _selectedLevelsKey = 'settings.selectedLevels';
   static const _startQuestionNumberKey = 'settings.startQuestionNumber';
+  static const _cardTextStyle = TextStyle(fontSize: 16);
+  static const _cardSectionTitleStyle = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+  );
 
   final _formKey = GlobalKey<FormState>();
   final _startQuestionNumberController = TextEditingController();
@@ -110,6 +115,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('出題設定'),
+        backgroundColor: const Color.fromARGB(255, 142, 219, 255),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -121,228 +127,260 @@ class _SettingScreenState extends State<SettingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //出題範囲
-                  Container(
+                  SizedBox(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('出題範囲'),
-                        const Text('レベルから絞る'),
-                        GridView.count(
-                          crossAxisCount: 3,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 2.4,
-                          children: _levelSelections.entries.map((entry) {
-                            return CheckboxListTile(
-                              title: Text(entry.key),
-                              value: entry.value,
-                              contentPadding: EdgeInsets.zero,
-                              controlAffinity: ListTileControlAffinity.leading,
-                              dense: true,
-                              onChanged: _isQuestionNumberFilterEnabled
-                                  ? null
-                                  : (value) {
-                                      setState(() {
-                                        _levelSelections[entry.key] =
-                                            value ?? false;
-                                      });
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('出題範囲', style: _cardSectionTitleStyle),
+                            const SizedBox(height: 8),
+                            const Text('レベルから絞る', style: _cardTextStyle),
+                            GridView.count(
+                              crossAxisCount: 3,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              childAspectRatio: 2.4,
+                              children: _levelSelections.entries.map((entry) {
+                                return CheckboxListTile(
+                                  title: Text(entry.key, style: _cardTextStyle),
+                                  value: entry.value,
+                                  contentPadding: EdgeInsets.zero,
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
+                                  dense: true,
+                                  onChanged: _isQuestionNumberFilterEnabled
+                                      ? null
+                                      : (value) {
+                                          setState(() {
+                                            _levelSelections[entry.key] =
+                                                value ?? false;
+                                          });
+                                          _saveSettings();
+                                        },
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Text('問題番号から絞る：', style: _cardTextStyle),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _startQuestionNumberController,
+                                    style: _cardTextStyle,
+                                    keyboardType: TextInputType.number,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    onChanged: (_) {
+                                      setState(() {});
                                       _saveSettings();
                                     },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Text('問題番号から絞る：'),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _startQuestionNumberController,
-                                keyboardType: TextInputType.number,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onChanged: (_) {
-                                  setState(() {});
-                                  _saveSettings();
-                                },
-                                decoration: const InputDecoration(
-                                  isDense: true,
-                                  border: OutlineInputBorder(),
+                                    decoration: const InputDecoration(
+                                      isDense: true,
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return null;
+                                      }
+
+                                      final number = int.tryParse(value);
+                                      if (number == null || number <= 0) {
+                                        return '1以上の自然数を入力してください';
+                                      }
+
+                                      if (number > 10000) {
+                                        return '10000以下で入力してください';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return null;
-                                  }
-
-                                  final number = int.tryParse(value);
-                                  if (number == null || number <= 0) {
-                                    return '1以上の自然数を入力してください';
-                                  }
-
-                                  if (number > 10000) {
-                                    return '10000以下で入力してください';
-                                  }
-
-                                  return null;
-                                },
-                              ),
+                                const SizedBox(width: 8),
+                                const Text('番以降から出題', style: _cardTextStyle),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            const Text('番以降から出題'),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   //出題数
-                  Container(
+                  SizedBox(
                     width: double.infinity,
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('出題数'),
-                        GridView.count(
-                          crossAxisCount: 4,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 2.0,
-                          children: ['5', '10', '20', '50'].map((choice) {
-                            return RadioListTile<String>(
-                              title: Text(choice),
-                              value: choice,
-                              groupValue: _questionCount,
-                              contentPadding: EdgeInsets.zero,
-                              controlAffinity: ListTileControlAffinity.leading,
-                              dense: true,
-                              onChanged: (value) {
-                                if (value == null) {
-                                  return;
-                                }
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('出題数', style: _cardSectionTitleStyle),
+                            GridView.count(
+                              crossAxisCount: 4,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              childAspectRatio: 2.0,
+                              children: ['5', '10', '20', '50'].map((choice) {
+                                return RadioListTile<String>(
+                                  title: Text(choice, style: _cardTextStyle),
+                                  value: choice,
+                                  groupValue: _questionCount,
+                                  contentPadding: EdgeInsets.zero,
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
+                                  dense: true,
+                                  onChanged: (value) {
+                                    if (value == null) {
+                                      return;
+                                    }
 
-                                setState(() {
-                                  _questionCount = value;
-                                });
-                                _saveSettings();
-                              },
-                            );
-                          }).toList(),
+                                    setState(() {
+                                      _questionCount = value;
+                                    });
+                                    _saveSettings();
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   //出題形式
-                  Container(
+                  SizedBox(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('出題形式'),
-                        Row(
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text('英→日'),
-                                value: 'englishToJapanese',
-                                groupValue: _questionType,
-                                contentPadding: EdgeInsets.zero,
-                                onChanged: (value) {
-                                  if (value == null) {
-                                    return;
-                                  }
+                            const Text('出題形式', style: _cardSectionTitleStyle),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    title: const Text(
+                                      '英→日',
+                                      style: _cardTextStyle,
+                                    ),
+                                    value: 'englishToJapanese',
+                                    groupValue: _questionType,
+                                    contentPadding: EdgeInsets.zero,
+                                    onChanged: (value) {
+                                      if (value == null) {
+                                        return;
+                                      }
 
-                                  setState(() {
-                                    _questionType = value;
-                                  });
-                                  _saveSettings();
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text('日→英'),
-                                value: 'japaneseToEnglish',
-                                groupValue: _questionType,
-                                contentPadding: EdgeInsets.zero,
-                                onChanged: (value) {
-                                  if (value == null) {
-                                    return;
-                                  }
+                                      setState(() {
+                                        _questionType = value;
+                                      });
+                                      _saveSettings();
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    title: const Text(
+                                      '日→英',
+                                      style: _cardTextStyle,
+                                    ),
+                                    value: 'japaneseToEnglish',
+                                    groupValue: _questionType,
+                                    contentPadding: EdgeInsets.zero,
+                                    onChanged: (value) {
+                                      if (value == null) {
+                                        return;
+                                      }
 
-                                  setState(() {
-                                    _questionType = value;
-                                  });
-                                  _saveSettings();
-                                },
-                              ),
+                                      setState(() {
+                                        _questionType = value;
+                                      });
+                                      _saveSettings();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   //順番
-                  Container(
-                    height: 72,
+                  SizedBox(
                     width: double.infinity,
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('順番'),
-                        Row(
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text('番号順'),
-                                value: 'numberOrder',
-                                groupValue: _orderType,
-                                contentPadding: EdgeInsets.zero,
-                                onChanged: (value) {
-                                  if (value == null) {
-                                    return;
-                                  }
+                            const Text('順番', style: _cardSectionTitleStyle),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    title: const Text(
+                                      '番号順',
+                                      style: _cardTextStyle,
+                                    ),
+                                    value: 'numberOrder',
+                                    groupValue: _orderType,
+                                    contentPadding: EdgeInsets.zero,
+                                    onChanged: (value) {
+                                      if (value == null) {
+                                        return;
+                                      }
 
-                                  setState(() {
-                                    _orderType = value;
-                                  });
-                                  _saveSettings();
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text('ランダム'),
-                                value: 'random',
-                                groupValue: _orderType,
-                                contentPadding: EdgeInsets.zero,
-                                onChanged: (value) {
-                                  if (value == null) {
-                                    return;
-                                  }
-                                  setState(() {
-                                    _orderType = value;
-                                  });
-                                  _saveSettings();
-                                },
-                              ),
+                                      setState(() {
+                                        _orderType = value;
+                                      });
+                                      _saveSettings();
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    title: const Text(
+                                      'ランダム',
+                                      style: _cardTextStyle,
+                                    ),
+                                    value: 'random',
+                                    groupValue: _orderType,
+                                    contentPadding: EdgeInsets.zero,
+                                    onChanged: (value) {
+                                      if (value == null) {
+                                        return;
+                                      }
+                                      setState(() {
+                                        _orderType = value;
+                                      });
+                                      _saveSettings();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
