@@ -108,6 +108,9 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('出題設定'),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -117,8 +120,6 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('出題設定'),
-                  const SizedBox(height: 24),
                   //出題範囲
                   Container(
                     width: double.infinity,
@@ -128,6 +129,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text('出題範囲'),
+                        const Text('レベルから絞る'),
                         GridView.count(
                           crossAxisCount: 3,
                           shrinkWrap: true,
