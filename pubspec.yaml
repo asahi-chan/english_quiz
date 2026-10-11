@@ -69,7 +69,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/data/abc12_english_words_60.db
+    - assets/data/word_list.db
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -5,6 +5,7 @@ class Word {
     required this.id,
     required this.english,
     required this.japanese,
+    required this.partOfSpeech,
     required this.level,
     required this.isFavorite,
   });
@@ -14,6 +15,7 @@ class Word {
       id: map['id'] as int,
       english: map['english'] as String,
       japanese: map['japanese'] as String,
+      partOfSpeech: map['part_of_speech'] as String,
       level: map['level'] as String,
       isFavorite: _parseIsFavorite(map['is_favorite']),
     );
@@ -36,6 +38,7 @@ class Word {
   final int id;
   final String english;
   final String japanese;
+  final String partOfSpeech;
   final String level;
   final bool isFavorite;
 }

@@ -34,7 +34,6 @@ class _SettingScreenState extends State<SettingScreen> {
     'B1': false,
     'B2': false,
     'C1': false,
-    'C2': false,
   };
 
   bool get _isQuestionNumberFilterEnabled =>

@@ -161,6 +161,7 @@ class _QuizScreenState extends State<QuizScreen> {
           final answerText = widget.questionType == 'japaneseToEnglish'
               ? word?.english ?? ''
               : word?.japanese ?? '';
+          final partOfSpeechText = word?.partOfSpeech ?? '';
           return Stack(
             children: [
               Align(
@@ -194,6 +195,16 @@ class _QuizScreenState extends State<QuizScreen> {
                             context,
                           ).textTheme.titleLarge?.copyWith(fontSize: 36),
                         ),
+                        if (partOfSpeechText.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            '品詞：$partOfSpeechText',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleMedium?.copyWith(fontSize: 24),
+                          ),
+                        ],
                       ],
                     ],
                   ),
