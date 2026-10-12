@@ -1,17 +1,84 @@
-# english_quiz
+# 英単語クイズアプリ
 
-A new Flutter project.
+Flutter で作成した、英単語学習向けのシンプルなクイズアプリです。  
+出題範囲・出題数・出題形式・並び順を設定して、自分の学習スタイルに合わせてテンポよく単語学習ができます。
 
-## Getting Started
+## 特徴
 
-This project is a starting point for a Flutter application.
+- **出題範囲を選べる**
+  - CEFR レベル（A1 / A2 / B1 / B2 / C1）で絞り込み
+  - 問題番号を指定して、その番号以降から出題
+- **出題数を選べる**
+  - 5問 / 10問 / 20問 / 50問
+- **出題形式を切り替えられる**
+  - 英語 → 日本語
+  - 日本語 → 英語
+- **出題順を切り替えられる**
+  - 番号順
+  - ランダム
+- **学習を続けやすい**
+  - 答えを表示してから次の問題へ進むシンプルな流れ
+  - 終了画面から再挑戦・設定画面への戻る操作が可能
+- **設定を保存**
+  - `SharedPreferences` により、前回の設定内容を保持
 
-A few resources to get you started if this is your first Flutter project:
+## 画面の流れ
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+1. **出題設定画面**
+   - レベルまたは開始問題番号を指定
+   - 出題数、出題形式、順番を設定
+2. **クイズ画面**
+   - 問題文を表示
+   - ボタンを押すと答えと品詞を表示
+3. **終了画面**
+   - もう一度同じ条件で挑戦
+   - 出題設定に戻る
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 使用技術
+
+- **Flutter**
+- **Dart**
+- **sqflite**
+  - 単語データベースの読み込みに使用
+- **shared_preferences**
+  - 出題設定の保存に使用
+- **lottie / flutter_icons_animated**
+  - 終了画面の演出に使用
+
+## データについて
+
+- 単語データはアプリ内の SQLite データベース（`assets/data/word_list.db`）から読み込んでいます。
+- A1〜B2 の単語は、東京外国語大学投野由紀夫研究室が公開する **CEFR-J Wordlist Version 1.6** をもとに収録しています。
+- C1 以上の単語は、学習難易度の目安として独自に分類したものです。
+
+## セットアップ
+
+### 1. 依存関係を取得
+
+```bash
+flutter pub get
+```
+
+### 2. アプリを起動
+
+```bash
+flutter run
+```
+
+## ディレクトリ構成
+
+```text
+lib/
+├─ database/      # SQLite データベース初期化
+├─ model/         # 単語モデル
+├─ repository/    # データ取得処理
+├─ screen/        # 画面UI
+└─ service/       # クイズ生成処理
+```
+
+## 今後のアップデート
+
+- 正答数・回答履歴の記録
+- 苦手単語の復習モード
+- 検索機能やお気に入り機能
+- レベル別の学習進捗表示
