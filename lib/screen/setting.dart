@@ -28,19 +28,19 @@ class _SettingScreenState extends State<SettingScreen> {
   String _questionType = 'englishToJapanese';
   String _orderType = 'numberOrder';
   String _questionCount = '5';
-  final Map<String, bool> _levelSelections = {
-    'A1': false,
-    'A2': false,
-    'B1': false,
-    'B2': false,
-    'C1': false,
+  final Map<String, Map<String, bool>> _levelSelections = {
+    'A1': {'1166問': false},
+    'A2': {'1411問': false},
+    'B1': {'2445問': false},
+    'B2': {'2779問': false},
+    'C1': {'2199問': false},
   };
 
   bool get _isQuestionNumberFilterEnabled =>
       _startQuestionNumberController.text.isNotEmpty;
 
   List<String> get _selectedLevels => _levelSelections.entries
-      .where((entry) => entry.value)
+      .where((entry) => entry.value.values.any((isSelected) => isSelected))
       .map((entry) => entry.key)
       .toList();
 
@@ -84,7 +84,9 @@ class _SettingScreenState extends State<SettingScreen> {
       }
 
       for (final level in _levelSelections.keys) {
-        _levelSelections[level] = savedSelectedLevels.contains(level);
+        _levelSelections[level] = _levelSelections[level]!.map(
+          (key, value) => MapEntry(key, savedSelectedLevels.contains(level)),
+        );
       }
 
       _startQuestionNumberController.text = savedStartQuestionNumber;
@@ -155,30 +157,53 @@ class _SettingScreenState extends State<SettingScreen> {
                             const Text('出題範囲', style: _cardSectionTitleStyle),
                             const SizedBox(height: 8),
                             const Text('レベルから絞る', style: _cardTextStyle),
-                            GridView.count(
-                              crossAxisCount: 3,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              childAspectRatio: 2.4,
-                              children: _levelSelections.entries.map((entry) {
-                                return CheckboxListTile(
-                                  title: Text(entry.key, style: _cardTextStyle),
-                                  value: entry.value,
-                                  contentPadding: EdgeInsets.zero,
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  dense: true,
-                                  onChanged: _isQuestionNumberFilterEnabled
-                                      ? null
-                                      : (value) {
-                                          setState(() {
-                                            _levelSelections[entry.key] =
-                                                value ?? false;
-                                          });
-                                          _saveSettings();
-                                        },
-                                );
-                              }).toList(),
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                listTileTheme: const ListTileThemeData(
+                                  horizontalTitleGap: 4,
+                                  minLeadingWidth: 24,
+                                ),
+                              ),
+                              child: GridView.count(
+                                crossAxisCount: 3,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                childAspectRatio: 2.4,
+                                children: _levelSelections.entries.map((entry) {
+                                  return CheckboxListTile(
+                                    title: Text(
+                                      "${entry.key}(${entry.value.keys.first})",
+                                      style: _cardTextStyle.copyWith(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    value: entry.value.values.first,
+                                    contentPadding: EdgeInsets.zero,
+                                    visualDensity: const VisualDensity(
+                                      horizontal: -4,
+                                      vertical: -4,
+                                    ),
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    dense: true,
+                                    onChanged: _isQuestionNumberFilterEnabled
+                                        ? null
+                                        : (value) {
+                                            setState(() {
+                                              _levelSelections[entry.key] = {
+                                                _levelSelections[entry.key]!
+                                                        .keys
+                                                        .first:
+                                                    value ?? false,
+                                              };
+                                            });
+                                            _saveSettings();
+                                          },
+                                  );
+                                }).toList(),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Row(
