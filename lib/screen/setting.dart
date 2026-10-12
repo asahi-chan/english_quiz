@@ -109,6 +109,22 @@ class _SettingScreenState extends State<SettingScreen> {
     super.dispose();
   }
 
+  Widget _buildChoiceChip({
+    required String label,
+    required bool selected,
+    required ValueChanged<bool> onSelected,
+  }) {
+    return ChoiceChip(
+      label: Text(label, style: _cardTextStyle),
+      selected: selected,
+      onSelected: onSelected,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 12),
+      selectedColor: const Color.fromARGB(255, 142, 219, 255),
+      side: const BorderSide(color: Color.fromARGB(255, 0, 86, 156)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,7 +232,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '※CEFRを参考に学習難易度の目安として単語のレベルを分類しています。公式な語彙リストを示すものではありません。',
+                    '※A1〜B2の単語は、東京外国語大学投野由紀夫研究室が公開する「CEFR-J Wordlist Version 1.6」に基づいて収録しています。C1以上の単語は学習難易度の目安として独自に分類しており、公式なCEFR語彙リストに基づくものではありません。',
                     style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
@@ -231,32 +247,30 @@ class _SettingScreenState extends State<SettingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('出題数', style: _cardSectionTitleStyle),
-                            GridView.count(
-                              crossAxisCount: 4,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              childAspectRatio: 2.0,
-                              children: ['5', '10', '20', '50'].map((choice) {
-                                return RadioListTile<String>(
-                                  title: Text(choice, style: _cardTextStyle),
-                                  value: choice,
-                                  groupValue: _questionCount,
-                                  contentPadding: EdgeInsets.zero,
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  dense: true,
-                                  onChanged: (value) {
-                                    if (value == null) {
-                                      return;
-                                    }
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: ['5', '10', '20', '50'].map((choice) {
+                                  return _buildChoiceChip(
+                                    label: choice,
+                                    selected: _questionCount == choice,
+                                    onSelected: (selected) {
+                                      if (!selected) {
+                                        return;
+                                      }
 
-                                    setState(() {
-                                      _questionCount = value;
-                                    });
-                                    _saveSettings();
-                                  },
-                                );
-                              }).toList(),
+                                      setState(() {
+                                        _questionCount = choice;
+                                      });
+                                      _saveSettings();
+                                    },
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ],
                         ),
@@ -275,51 +289,45 @@ class _SettingScreenState extends State<SettingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('出題形式', style: _cardSectionTitleStyle),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text(
-                                      '英→日',
-                                      style: _cardTextStyle,
-                                    ),
-                                    value: 'englishToJapanese',
-                                    groupValue: _questionType,
-                                    contentPadding: EdgeInsets.zero,
-                                    onChanged: (value) {
-                                      if (value == null) {
+                            const SizedBox(height: 8),
+                            Align(
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  _buildChoiceChip(
+                                    label: '英語→日本語',
+                                    selected:
+                                        _questionType == 'englishToJapanese',
+                                    onSelected: (selected) {
+                                      if (!selected) {
                                         return;
                                       }
 
                                       setState(() {
-                                        _questionType = value;
+                                        _questionType = 'englishToJapanese';
                                       });
                                       _saveSettings();
                                     },
                                   ),
-                                ),
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text(
-                                      '日→英',
-                                      style: _cardTextStyle,
-                                    ),
-                                    value: 'japaneseToEnglish',
-                                    groupValue: _questionType,
-                                    contentPadding: EdgeInsets.zero,
-                                    onChanged: (value) {
-                                      if (value == null) {
+                                  _buildChoiceChip(
+                                    label: '日本語→英語',
+                                    selected:
+                                        _questionType == 'japaneseToEnglish',
+                                    onSelected: (selected) {
+                                      if (!selected) {
                                         return;
                                       }
 
                                       setState(() {
-                                        _questionType = value;
+                                        _questionType = 'japaneseToEnglish';
                                       });
                                       _saveSettings();
                                     },
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -338,50 +346,43 @@ class _SettingScreenState extends State<SettingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('順番', style: _cardSectionTitleStyle),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text(
-                                      '番号順',
-                                      style: _cardTextStyle,
-                                    ),
-                                    value: 'numberOrder',
-                                    groupValue: _orderType,
-                                    contentPadding: EdgeInsets.zero,
-                                    onChanged: (value) {
-                                      if (value == null) {
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  _buildChoiceChip(
+                                    label: '番号順',
+                                    selected: _orderType == 'numberOrder',
+                                    onSelected: (selected) {
+                                      if (!selected) {
                                         return;
                                       }
 
                                       setState(() {
-                                        _orderType = value;
+                                        _orderType = 'numberOrder';
                                       });
                                       _saveSettings();
                                     },
                                   ),
-                                ),
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text(
-                                      'ランダム',
-                                      style: _cardTextStyle,
-                                    ),
-                                    value: 'random',
-                                    groupValue: _orderType,
-                                    contentPadding: EdgeInsets.zero,
-                                    onChanged: (value) {
-                                      if (value == null) {
+                                  _buildChoiceChip(
+                                    label: 'ランダム',
+                                    selected: _orderType == 'random',
+                                    onSelected: (selected) {
+                                      if (!selected) {
                                         return;
                                       }
                                       setState(() {
-                                        _orderType = value;
+                                        _orderType = 'random';
                                       });
                                       _saveSettings();
                                     },
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -428,7 +429,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               );
             },
-            child: const Text('スタート💪', style: TextStyle(fontSize: 18)),
+            child: const Text('クイズを開始💪', style: TextStyle(fontSize: 18)),
           ),
         ),
       ),
