@@ -1,4 +1,4 @@
-package com.example.english_quiz
+package com.asahi.english_quiz
 
 import io.flutter.embedding.android.FlutterActivity
 
