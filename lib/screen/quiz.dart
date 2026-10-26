@@ -213,7 +213,7 @@ class _QuizScreenState extends State<QuizScreen> {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 144,
+                bottom: MediaQuery.of(context).size.height * 0.1,
                 child: Center(
                   child: SizedBox(
                     width: 140,
