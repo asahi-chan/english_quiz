@@ -1,6 +1,13 @@
 // 単語データを表すモデルクラス
 
 class Word {
+  final int id;
+  final String english;
+  final String japanese;
+  final String partOfSpeech;
+  final String level;
+  final bool isFavorite;
+
   const Word({
     required this.id,
     required this.english,
@@ -34,11 +41,4 @@ class Word {
       'is_favorite must be bool or int',
     );
   }
-
-  final int id;
-  final String english;
-  final String japanese;
-  final String partOfSpeech;
-  final String level;
-  final bool isFavorite;
 }

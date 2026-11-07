@@ -17,7 +17,6 @@ class _SettingScreenState extends State<SettingScreen> {
   static const _questionCountKey = 'settings.questionCount';
   static const _selectedLevelsKey = 'settings.selectedLevels';
   static const _startQuestionNumberKey = 'settings.startQuestionNumber';
-  static const _cardTextStyle = TextStyle(fontSize: 16);
   static const _cardSectionTitleStyle = TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w600,
@@ -115,9 +114,10 @@ class _SettingScreenState extends State<SettingScreen> {
     required String label,
     required bool selected,
     required ValueChanged<bool> onSelected,
+    required TextStyle cardTextStyle,
   }) {
     return ChoiceChip(
-      label: Text(label, style: _cardTextStyle),
+      label: Text(label, style: cardTextStyle),
       selected: selected,
       onSelected: onSelected,
       labelPadding: const EdgeInsets.symmetric(horizontal: 12),
@@ -129,6 +129,10 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cardTextStyle = TextStyle(
+      fontSize: (MediaQuery.of(context).size.width * 0.04).clamp(8.0, 15.0),
+    );
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -156,7 +160,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           children: [
                             const Text('出題範囲', style: _cardSectionTitleStyle),
                             const SizedBox(height: 8),
-                            const Text('レベルから絞る', style: _cardTextStyle),
+                            Text('レベルから絞る', style: cardTextStyle),
                             Theme(
                               data: Theme.of(context).copyWith(
                                 listTileTheme: const ListTileThemeData(
@@ -173,7 +177,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   return CheckboxListTile(
                                     title: Text(
                                       "${entry.key}(${entry.value.keys.first})",
-                                      style: _cardTextStyle.copyWith(
+                                      style: cardTextStyle.copyWith(
                                         fontSize: 15,
                                       ),
                                     ),
@@ -208,12 +212,12 @@ class _SettingScreenState extends State<SettingScreen> {
                             const SizedBox(height: 8),
                             Row(
                               children: [
-                                const Text('問題番号から絞る：', style: _cardTextStyle),
+                                Text('問題番号から絞る：', style: cardTextStyle),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: TextFormField(
                                     controller: _startQuestionNumberController,
-                                    style: _cardTextStyle,
+                                    style: cardTextStyle,
                                     keyboardType: TextInputType.number,
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
@@ -247,7 +251,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                const Text('番以降から出題', style: _cardTextStyle),
+                                Text('番以降から出題', style: cardTextStyle),
                               ],
                             ),
                           ],
@@ -283,6 +287,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   return _buildChoiceChip(
                                     label: choice,
                                     selected: _questionCount == choice,
+                                    cardTextStyle: cardTextStyle,
                                     onSelected: (selected) {
                                       if (!selected) {
                                         return;
@@ -325,6 +330,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     label: '英語→日本語',
                                     selected:
                                         _questionType == 'englishToJapanese',
+                                    cardTextStyle: cardTextStyle,
                                     onSelected: (selected) {
                                       if (!selected) {
                                         return;
@@ -340,6 +346,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     label: '日本語→英語',
                                     selected:
                                         _questionType == 'japaneseToEnglish',
+                                    cardTextStyle: cardTextStyle,
                                     onSelected: (selected) {
                                       if (!selected) {
                                         return;
@@ -382,6 +389,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   _buildChoiceChip(
                                     label: '番号順',
                                     selected: _orderType == 'numberOrder',
+                                    cardTextStyle: cardTextStyle,
                                     onSelected: (selected) {
                                       if (!selected) {
                                         return;
@@ -396,6 +404,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   _buildChoiceChip(
                                     label: 'ランダム',
                                     selected: _orderType == 'random',
+                                    cardTextStyle: cardTextStyle,
                                     onSelected: (selected) {
                                       if (!selected) {
                                         return;
