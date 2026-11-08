@@ -22,6 +22,34 @@ class _FavoritesWordsScreenState extends State<FavoritesWordsScreen> {
     _favoriteWordsFuture = _wordRepository.fetchFavoriteWords();
   }
 
+  Future<void> _confirmRemoveFavorite(
+    Word word,
+    List<Word> favoriteWords,
+  ) async {
+    final shouldRemove = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('${word.english}(${word.japanese})を削除しますか？'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('いいえ'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('はい'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldRemove == true && mounted) {
+      await _removeFavorite(word, favoriteWords);
+    }
+  }
+
   Future<void> _removeFavorite(Word word, List<Word> favoriteWords) async {
     setState(() {
       _removingWordIds.add(word.id);
@@ -96,7 +124,7 @@ class _FavoritesWordsScreenState extends State<FavoritesWordsScreen> {
                       IconButton(
                         onPressed: _removingWordIds.contains(word.id)
                             ? null
-                            : () => _removeFavorite(word, favoriteWords),
+                            : () => _confirmRemoveFavorite(word, favoriteWords),
                         icon: const Icon(Icons.delete),
                         tooltip: 'ふせんを外す',
                       ),
