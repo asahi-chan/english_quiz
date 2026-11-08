@@ -36,4 +36,30 @@ class WordRepository {
 
     return wordMaps.map((wordMap) => Word.fromMap(wordMap)).toList();
   }
+
+  Future<void> updateFavorite(int wordId, bool isFavorite) async {
+    final db = await _databaseHelper.database;
+    final updatedRows = await db.update(
+      'words',
+      {'is_favorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [wordId],
+    );
+
+    if (updatedRows == 0) {
+      throw StateError('単語が見つからないため、ふせんを保存できませんでした。');
+    }
+  }
+
+  Future<List<Word>> fetchFavoriteWords() async {
+    final db = await _databaseHelper.database;
+    final wordMaps = await db.query(
+      'words',
+      where: 'is_favorite = ?',
+      whereArgs: [1],
+      orderBy: 'id ASC',
+    );
+
+    return wordMaps.map((wordMap) => Word.fromMap(wordMap)).toList();
+  }
 }

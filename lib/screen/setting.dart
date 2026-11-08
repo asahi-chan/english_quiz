@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bottomNavigationBar.dart';
 import 'quiz.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -160,7 +161,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           children: [
                             const Text('出題範囲', style: _cardSectionTitleStyle),
                             const SizedBox(height: 8),
-                            Text('レベルから絞る', style: cardTextStyle),
+                            Text('CEFRのレベルから絞る', style: cardTextStyle),
                             Theme(
                               data: Theme.of(context).copyWith(
                                 listTileTheme: const ListTileThemeData(
@@ -430,42 +431,48 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: SafeArea(
-        minimum: EdgeInsets.all(16),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 0, 86, 156),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            onPressed: () {
-              if (!(_formKey.currentState?.validate() ?? false)) {
-                return;
-              }
-
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  //loadQuiz()を呼び出すのはQuizScreenであり、loadQuiz()はorderTypeやquestionTypeが必要だから
-                  //QuizScreenにこれらを渡している。
-                  builder: (context) => QuizScreen(
-                    questionType: _questionType,
-                    orderType: _orderType,
-                    selectedLevels: _selectedLevels,
-                    questionCount: int.parse(_questionCount),
-                    startQuestionNumber: _startQuestionNumber,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SafeArea(
+            minimum: const EdgeInsets.all(16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 0, 86, 156),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              );
-            },
-            child: const Text('クイズを開始💪', style: TextStyle(fontSize: 18)),
+                onPressed: () {
+                  if (!(_formKey.currentState?.validate() ?? false)) {
+                    return;
+                  }
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      //loadQuiz()を呼び出すのはQuizScreenであり、loadQuiz()はorderTypeやquestionTypeが必要だから
+                      //QuizScreenにこれらを渡している。
+                      builder: (context) => QuizScreen(
+                        questionType: _questionType,
+                        orderType: _orderType,
+                        selectedLevels: _selectedLevels,
+                        questionCount: int.parse(_questionCount),
+                        startQuestionNumber: _startQuestionNumber,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('クイズを開始💪', style: TextStyle(fontSize: 18)),
+              ),
+            ),
           ),
-        ),
+          const BottomNavigationBarWidget(currentIndex: 0),
+        ],
       ),
     );
   }

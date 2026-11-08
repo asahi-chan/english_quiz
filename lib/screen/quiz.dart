@@ -3,6 +3,7 @@ import '../model/word.dart';
 import 'end.dart';
 import 'setting.dart';
 import '../service/make_quiz.dart';
+import '../repository/word_repository.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
@@ -29,6 +30,7 @@ class _QuizScreenState extends State<QuizScreen> {
   List<Word> _quizList = [];
   int _currentIndex = 0;
   bool _showAnswer = false;
+  final WordRepository _wordRepository = WordRepository();
 
   Future<void> _showBackToSettingsDialog() async {
     final shouldGoBack = await showDialog<bool>(
@@ -118,6 +120,29 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
+  Future<void> _addFavorite(Word word) async {
+    try {
+      await _wordRepository.updateFavorite(word.id, true);
+    } on Exception catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('ふせんの保存に失敗しました: $error')));
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _quizList[_currentIndex] = word.copyWith(isFavorite: true);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,6 +187,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ? word?.english ?? ''
               : word?.japanese ?? '';
           final partOfSpeechText = word?.partOfSpeech ?? '';
+          final isFavorite = word?.isFavorite ?? false;
           return Stack(
             children: [
               Align(
@@ -215,23 +241,45 @@ class _QuizScreenState extends State<QuizScreen> {
                 right: 0,
                 bottom: MediaQuery.of(context).size.height * 0.1,
                 child: Center(
-                  child: SizedBox(
-                    width: 140,
-                    height: 140,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 0, 86, 156),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        shape: const CircleBorder(),
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (word != null) ...[
+                        ElevatedButton(
+                          onPressed: isFavorite
+                              ? null
+                              : () => _addFavorite(word),
+                          child: Text(isFavorite ? 'ふせん済み' : 'ふせんを付ける'),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      SizedBox(
+                        width: 140,
+                        height: 140,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              0,
+                              86,
+                              156,
+                            ),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.zero,
+                            shape: const CircleBorder(),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          onPressed: _handleButtonPressed,
+                          child: Text(
+                            _buttonLabel,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                      onPressed: _handleButtonPressed,
-                      child: Text(_buttonLabel, textAlign: TextAlign.center),
-                    ),
+                    ],
                   ),
                 ),
               ),

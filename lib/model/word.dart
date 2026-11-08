@@ -17,6 +17,17 @@ class Word {
     required this.isFavorite,
   });
 
+  Word copyWith({bool? isFavorite}) {
+    return Word(
+      id: id,
+      english: english,
+      japanese: japanese,
+      partOfSpeech: partOfSpeech,
+      level: level,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
+
   factory Word.fromMap(Map<String, dynamic> map) {
     return Word(
       id: map['id'] as int,
